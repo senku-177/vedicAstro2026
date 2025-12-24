@@ -26,6 +26,7 @@ const FALLBACK_DATA = {
   isTarot: false,
   tarotQuestion: "",
   tarotAnalysis: "",
+  tarotCards: []
 };
 
 export async function POST(req: Request) {
