@@ -95,7 +95,7 @@ export async function POST(req: Request) {
         End with a strong positive note.
         IMPORTANT: Output ONLY valid JSON.`;
 
-        let userPrompt = `
+        const userPrompt = `
           Birth details: Name: ${name}, DOB: ${dob}, Time: ${time}, Place: ${place}.
           Generate JSON with keys: 
           "intro", "personality", "transits", "career", "finance", "health", "love", "lucky", "kundli", "conclusion".
@@ -137,11 +137,12 @@ export async function POST(req: Request) {
 
     const keysToFix = ['intro','personality','transits','career','finance','health','love','lucky','kundli','conclusion', 'tarotQuestion', 'tarotAnalysis'];
     keysToFix.forEach(key => {
+      //@ts-ignore
       reportData[key] = ensureString(reportData[key]);
     });
         if (content) {
             const parsed = JSON.parse(content);
-            reportData = { ...reportData, ...parsed, isTarot: isTarot || isBundle };
+            reportData = { ...reportData, ...parsed, isTarot: isTarot };
         }
     } catch (aiError: any) {
         console.error("OpenAI Failed (Using Fallback):", aiError.message);
