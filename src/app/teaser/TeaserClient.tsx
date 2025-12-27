@@ -81,7 +81,9 @@ export default function TeaserResult() {
 
     return `/checkout?${params.toString()}`;
   };
-  const sections = [
+  type SectionKey = 'intro' | 'personality' | 'transits' | 'career' | 'finance' | 'health' | 'love' | 'lucky' | 'kundli';
+
+  const sections: { key: SectionKey; title: string }[] = [
     { key: 'intro', title: '2026 Overview' },
     { key: 'personality', title: 'Your Core Personality' },
     { key: 'transits', title: 'Planetary Transits' },
@@ -93,15 +95,17 @@ export default function TeaserResult() {
     { key: 'kundli', title: 'Birth Chart Insights' },
   ];
 
-  const [sectionState, setSectionState] = useState(() =>
-    sections.reduce((acc, s) => ({
-      ...acc,
-      [s.key]: { unlocked: false, loading: false, content: '' },
-    }), {})
+  type SectionState = { unlocked: boolean; loading: boolean; content: string };
+
+  const [sectionState, setSectionState] = useState<Record<SectionKey, SectionState>>(() =>
+    sections.reduce((acc, s) => {
+      acc[s.key] = { unlocked: false, loading: false, content: '' };
+      return acc;
+    }, {} as Record<SectionKey, SectionState>)
   );
 
   // Boilerplate teasers (random per load)
-  const boilerplates = {
+  const boilerplates: Record<SectionKey, string[]> = {
     intro: [
       `Namaste ${name}, 2026 holds powerful shifts for you. Jupiter brings expansion, but Saturn tests resilience...`,
       `${name}, the stars align for transformation. New doors open, yet patience is key...`,
@@ -139,7 +143,6 @@ export default function TeaserResult() {
       `Birth chart reveals hidden potential for success, ${name}...`,
     ],
   };
-
   useEffect(() => {
     // Simulate teaser load
     setTimeout(() => {
@@ -156,7 +159,7 @@ export default function TeaserResult() {
     }, 2000);
   }, []);
 
-  const unlockSection = async (sectionKey: string) => {
+  const unlockSection = async (sectionKey: SectionKey) => {
     setSectionState(prev => ({ ...prev, [sectionKey]: { ...prev[sectionKey], loading: true } }));
 
     try {
