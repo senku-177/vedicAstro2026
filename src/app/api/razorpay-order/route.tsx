@@ -8,10 +8,23 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET, 
 });
 
+const VALID_PRICES: Record<string, number> = {
+  vedic: 499,
+  tarot: 299,
+  bundle: 699,
+  section: 50
+};
 export async function POST(req: Request) {
   try {
     const { amount, currency } = await req.json();
     
+    if (!amount || typeof amount !== 'number' || !Object.values(VALID_PRICES).includes(amount)) {
+      return NextResponse.json(
+        { error: 'Invalid amount specified.' }, 
+        { status: 400 }
+      );
+    }
+
     // Create an Order on the Razorpay server
     const options = {
       // Razorpay expects the amount in the smallest currency unit (paise)
