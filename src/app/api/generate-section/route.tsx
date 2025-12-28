@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid payment' }, { status: 400 });
     }
 
-    const prompt = `You are a Vedic astrologer. Generate a detailed, positive, personalized 350-500 word section on "${section}" for 2026.
+    const prompt = `You are a Vedic astrologer. Generate a detailed, positive, personalized 200-250 word section on "${section}" for 2026.
     Use birth details: Name: ${name}, DOB: ${dob}, Time: ${time}, Place: ${place}.
     Be honest about challenges but end positively. English only.`;
 

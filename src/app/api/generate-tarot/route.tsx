@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: 'system',
-          content: `You are a mystical Tarot reader. Provide a warm, positive, 300-word analysis using:
+          content: `You are a mystical Tarot reader. Provide a warm, positive, 250-word analysis using:
 Past: ${cards[0]}
 Present: ${cards[1]}
 Future: ${cards[2]}
