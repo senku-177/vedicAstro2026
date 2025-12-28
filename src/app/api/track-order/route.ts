@@ -16,4 +16,3 @@ export async function POST(req: Request) {
   }
 }
 
-// DO NOT add "export default POST" or "export default function..." here.

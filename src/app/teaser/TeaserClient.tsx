@@ -167,7 +167,7 @@ export default function TeaserResult() {
       const orderRes = await fetch('/api/razorpay-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: 100, currency: 'INR' }),
+        body: JSON.stringify({ amount: 50, currency: 'INR' }),
       });
 
       const order = await orderRes.json();
@@ -279,7 +279,7 @@ export default function TeaserResult() {
                       className="bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 rounded-full font-bold text-lg flex items-center gap-3 shadow-2xl hover:scale-105 transition"
                     >
                       <Lock size={20} />
-                      Unlock for ₹100
+                      Unlock for ₹50
                     </button>
                   </div>
                 </div>
