@@ -37,21 +37,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           {/* Footer - Now inside the max-w-md for a consistent "App" feel */}
           <footer className="relative z-10 bg-[#0a0a15]/80 backdrop-blur-md border-t border-slate-800 py-10 px-6 text-center">
-            <div className="flex flex-col items-center gap-4">
-              <div className="text-amber-500 font-bold text-lg tracking-widest flex items-center gap-2">
-                <Sparkles size={16} /> VEDIC WISDOM
-              </div>
-              
-              <nav className="flex gap-6 text-xs font-medium text-slate-500 uppercase tracking-tighter">
-                <Link href="/privacy" className="hover:text-amber-500 transition-colors">Privacy</Link>
-                <Link href="/terms" className="hover:text-amber-500 transition-colors">Terms</Link>
-              </nav>
-              
-              <p className="text-slate-600 text-[10px] mt-2">
-                © 2026 Vedic Wisdom. Decisions based on astrology are your own responsibility.
-              </p>
-            </div>
-          </footer>
+  <div className="flex flex-col items-center gap-4">
+    <div className="text-amber-500 font-bold text-lg tracking-widest flex items-center gap-2">
+      <Sparkles size={16} /> VEDIC WISDOM
+    </div>
+    
+    {/* Grid layout for footer links for better mobile scannability */}
+    <nav className="grid grid-cols-2 md:flex gap-x-8 gap-y-4 text-[10px] font-medium text-slate-500 uppercase tracking-widest">
+      <Link href="/privacy" className="hover:text-amber-500 transition-colors">Privacy Policy</Link>
+      <Link href="/terms" className="hover:text-amber-500 transition-colors">Terms of Service</Link>
+      <Link href="/shipping" className="hover:text-amber-500 transition-colors">Shipping & Delivery</Link>
+      <Link href="/contact" className="hover:text-amber-500 transition-colors">Contact Us</Link>
+    </nav>
+    
+    <p className="text-slate-600 text-[9px] mt-4 leading-relaxed max-w-[250px]">
+      © 2026 Vedic Wisdom. Decisions based on astrology are your own responsibility. All digital products are non-refundable.
+    </p>
+  </div>
+</footer>
         </div>
       </body>
     </html>
