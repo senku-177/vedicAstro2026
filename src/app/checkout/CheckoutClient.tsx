@@ -14,7 +14,7 @@ export default function CheckoutClient() {
   const router = useRouter();
 
   // Extract all params
-  const price = searchParams.get('price') || '499';
+  const price = searchParams.get('price') || '299';
   const plan = searchParams.get('plan') || 'vedic';
   const name = searchParams.get('name') || 'User';
   const leadId = searchParams.get('leadId') || '';

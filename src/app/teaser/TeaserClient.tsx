@@ -317,7 +317,7 @@ export default function TeaserResult() {
 
           <div className="p-5 space-y-4">
             {/* Vedic Report */}
-            <Link href={buildCheckoutUrl('vedic', 499)}>
+            <Link href={buildCheckoutUrl('vedic', 299)}>
               <div className="border border-purple-500/30 bg-purple-900/10 rounded-xl p-5 flex justify-between items-center hover:bg-purple-900/20 transition-all cursor-pointer">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 text-2xl">🔮</div>
@@ -327,14 +327,14 @@ export default function TeaserResult() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-white">₹499</div>
-                  <div className="text-xs text-gray-500 line-through">₹799</div>
+                  <div className="text-2xl font-bold text-white">299</div>
+                  <div className="text-xs text-gray-500 line-through">₹599</div>
                 </div>
               </div>
             </Link>
 
             {/* Bundle - Best Value */}
-            <Link href={buildCheckoutUrl('bundle', 699)}>
+            <Link href={buildCheckoutUrl('bundle', 499)}>
               <div className="border-2 border-yellow-500 bg-gradient-to-r from-yellow-900/30 to-amber-900/20 rounded-xl p-5 relative overflow-hidden cursor-pointer transform hover:scale-105 transition">
                 <div className="absolute -top-2 right-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">BEST VALUE</div>
                 <div className="flex justify-between items-center">
@@ -346,7 +346,7 @@ export default function TeaserResult() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-yellow-400">₹699</div>
+                    <div className="text-2xl font-bold text-yellow-400">₹499</div>
                     <div className="text-xs text-gray-500 line-through">₹1098</div>
                   </div>
                 </div>

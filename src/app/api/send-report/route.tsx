@@ -158,7 +158,7 @@ export async function POST(req: Request) {
 
     // 4. EMAIL DELIVERY
     const { error } = await resend.emails.send({
-      from: 'Vedic Wisdom <onboarding@resend.dev>', // CHANGE THIS after verifying domain
+      from: 'Vedic Wisdom <reports@your2026horoscope.com>', // CHANGE THIS after verifying domain
       to: email, // Can only be YOUR email until verified
       subject: `Your 2026 Vedic Horoscope is Ready, ${name}! ✨`,
       html: `
