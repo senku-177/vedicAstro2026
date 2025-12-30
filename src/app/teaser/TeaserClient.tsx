@@ -32,6 +32,32 @@ export default function TeaserResult() {
     personality: 'Calculating your unique cosmic profile...',
   });
 
+  // --- NEW: LEAD TRACKING LOGIC ---
+  useEffect(() => {
+    const trackLeadArrival = async () => {
+      try {
+        // Replace '/api/track-lead' with the actual path to your API route
+        await fetch('/api/track-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            leadId: leadId || `teaser-${Date.now()}`,
+            name,
+            dob,
+            time,
+            place,
+            status: 'TEASER_VIEWED' // Identifies they saw the teaser but haven't paid full yet
+          }),
+        });
+      } catch (e) {
+        console.error("Background tracking failed", e);
+      }
+    };
+
+    trackLeadArrival();
+  }, [leadId, name, dob, time, place]);
+  // --------------------------------
+
   useEffect(() => {
     const generateTeaser = async () => {
       try {
@@ -54,7 +80,7 @@ export default function TeaserResult() {
         setTeaserData({
           sunSign: 'Aries (Mesh)',
           moonSign: 'Taurus (Vrishabha)',
-          personality: 'You possess a dynamic blend of energy and stability. Your fiery spirit drives ambition, while grounded intuition provides balance. This cosmic profile hints at great potential in 2026... but the full truth is waiting to be unlocked.',
+          personality: 'You possess a dynamic blend of energy and stability. Your fiery spirit drives ambition, while grounded intuition provides balance. This cosmic profile hints at great potential in 2026...',
         });
       } finally {
         setLoading(false);
@@ -102,47 +128,19 @@ export default function TeaserResult() {
   );
 
   const boilerplates: Record<SectionKey, string[]> = {
-    intro: [
-      `Namaste ${name}, 2026 holds powerful shifts for you. Jupiter brings expansion, but Saturn tests resilience...`,
-      `${name}, the stars align for transformation. New doors open, yet patience is key...`,
-    ],
-    personality: [
-      `Your ${teaserData.sunSign} fire meets ${teaserData.moonSign} depth, ${name}. Leadership comes naturally...`,
-      `${name}, you blend courage and intuition. Hidden strengths are waiting to emerge...`,
-    ],
-    transits: [
-      `Major transits activate your growth houses, ${name}. Opportunities arise mid-year...`,
-      `Jupiter favors prosperity, but Rahu brings surprises, ${name}...`,
-    ],
-    career: [
-      `Career growth is highlighted, ${name}. Promotions or new roles possible...`,
-      `Your professional path gains momentum in 2026, ${name}...`,
-    ],
-    finance: [
-      `Financial stability improves post-April, ${name}. Investments may pay off...`,
-      `Wealth flow strengthens, but mindful spending advised, ${name}...`,
-    ],
-    health: [
-      `Vitality remains strong with care, ${name}. Yoga and balance recommended...`,
-      `Health supports your ambitions, but rest is essential, ${name}...`,
-    ],
-    love: [
-      `Relationships deepen beautifully, ${name}. Romance blooms for singles...`,
-      `Love life flourishes with communication, ${name}...`,
-    ],
-    lucky: [
-      `Lucky colors: Red & Gold. Numbers: 1, 9. Dates: 5th, 14th...`,
-      `Your cosmic luck peaks on Thursdays, ${name}...`,
-    ],
-    kundli: [
-      `Your Kundli shows strong Lagna and beneficial yogas, ${name}...`,
-      `Birth chart reveals hidden potential for success, ${name}...`,
-    ],
+    intro: [`Namaste ${name}, 2026 holds powerful shifts for you. Jupiter brings expansion...`],
+    personality: [`Your ${teaserData.sunSign} fire meets ${teaserData.moonSign} depth...`],
+    transits: [`Major transits activate your growth houses, ${name}...`],
+    career: [`Career growth is highlighted, ${name}. Promotions or new roles possible...`],
+    finance: [`Financial stability improves post-April, ${name}. Investments may pay off...`],
+    health: [`Vitality remains strong with care, ${name}. Yoga and balance recommended...`],
+    love: [`Relationships deepen beautifully, ${name}. Romance blooms for singles...`],
+    lucky: [`Lucky colors: Red & Gold. Numbers: 1, 9. Dates: 5th, 14th...`],
+    kundli: [`Your Kundli shows strong Lagna and beneficial yogas, ${name}...`],
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
+    if (!loading) {
       setSectionState(prev => {
         const newState = { ...prev };
         sections.forEach(s => {
@@ -151,7 +149,7 @@ export default function TeaserResult() {
         });
         return newState;
       });
-    }, 2000);
+    }
   }, [loading]);
 
   const unlockSection = async (sectionKey: SectionKey) => {
@@ -160,11 +158,10 @@ export default function TeaserResult() {
       const orderRes = await fetch('/api/razorpay-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: 50, currency: 'INR' }),
+        body: JSON.stringify({ amount: 39, currency: 'INR' }),
       });
       const order = await orderRes.json();
-      if (!order.id) throw new Error('Order failed');
-
+      
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -210,13 +207,11 @@ export default function TeaserResult() {
     <div className="min-h-screen bg-[#050511] p-3 sm:p-4 pb-24">
       <Confetti width={width} height={height} recycle={false} numberOfPieces={200} />
 
-      {/* Tighter Header */}
       <div className="text-center mb-5 pt-2">
         <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">Welcome, {name} 🙏</h1>
         <p className="text-gray-500 text-xs sm:text-sm uppercase tracking-widest font-medium">Your 2026 Cosmic Blueprint</p>
       </div>
 
-      {/* Compressed Free Cosmic Profile */}
       <motion.div 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -229,7 +224,6 @@ export default function TeaserResult() {
           <span className="bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider">LIFETIME ACCESS</span>
         </div>
         
-        {/* Row Layout for Signs */}
         <div className="flex flex-row justify-around items-center gap-2 mb-4 bg-black/20 p-3 rounded-xl border border-white/5">
           <div className="text-center flex-1">
             <p className="text-gray-400 text-[10px] uppercase tracking-tighter mb-1 flex items-center justify-center gap-1">
@@ -249,7 +243,6 @@ export default function TeaserResult() {
         <p className="text-gray-300 text-xs sm:text-base leading-relaxed text-center sm:text-left">{teaserData.personality}</p>
       </motion.div>
 
-      {/* Premium Sections Area */}
       <h2 className="text-xl font-bold text-white mb-4 px-1">Unlock Your Full Destiny</h2>
 
       <div className="space-y-4">
@@ -284,7 +277,7 @@ export default function TeaserResult() {
                         className="bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-xl hover:scale-105 transition active:scale-95"
                       >
                         <Lock size={14} />
-                        Unlock for ₹50
+                        Unlock for ₹39
                       </button>
                     </div>
                   </div>
@@ -295,7 +288,6 @@ export default function TeaserResult() {
         })}
       </div>
 
-      {/* Fixed Sticky Footer Button */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#050511] via-[#050511]/90 to-transparent pointer-events-none z-40">
         <div className="pointer-events-auto max-w-sm mx-auto">
           <button
@@ -309,7 +301,6 @@ export default function TeaserResult() {
         </div>
       </div>
 
-      {/* Upsell Modal */}
       <Dialog open={showUpsell} onOpenChange={setShowUpsell}>
         <DialogContent className="bg-[#101025] border border-white/10 text-white w-[95%] max-w-md rounded-2xl p-0 overflow-hidden">
           <DialogTitle className="sr-only">Unlock Your Full Report</DialogTitle>
@@ -322,7 +313,7 @@ export default function TeaserResult() {
           </div>
 
           <div className="p-5 space-y-4">
-            <Link href={buildCheckoutUrl('vedic', 299)}>
+            <Link href={buildCheckoutUrl('vedic', 199)}>
               <div className="border border-purple-500/30 bg-purple-900/10 rounded-xl p-4 flex justify-between items-center hover:bg-purple-900/20 transition-all cursor-pointer">
                 <div className="flex gap-3">
                   <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl">🔮</div>
@@ -332,13 +323,13 @@ export default function TeaserResult() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-xl font-bold text-white">₹299</div>
-                  <div className="text-[10px] text-gray-500 line-through">₹599</div>
+                  <div className="text-xl font-bold text-white">₹199</div>
+                  <div className="text-[10px] text-gray-500 line-through">₹499</div>
                 </div>
               </div>
             </Link>
 
-            <Link href={buildCheckoutUrl('bundle', 499)}>
+            <Link href={buildCheckoutUrl('bundle', 299)}>
               <div className="border-2 border-yellow-500 bg-gradient-to-r from-yellow-900/30 to-amber-900/20 rounded-xl p-4 relative overflow-hidden cursor-pointer transform hover:scale-105 transition">
                 <div className="absolute -top-1 right-3 bg-yellow-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">BEST VALUE</div>
                 <div className="flex justify-between items-center">
@@ -350,14 +341,14 @@ export default function TeaserResult() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xl font-bold text-yellow-400">₹499</div>
-                    <div className="text-[10px] text-gray-500 line-through">₹1098</div>
+                    <div className="text-xl font-bold text-yellow-400">₹299</div>
+                    <div className="text-[10px] text-gray-500 line-through">₹699</div>
                   </div>
                 </div>
               </div>
             </Link>
 
-            <Link href={buildCheckoutUrl('tarot', 299)}>
+            <Link href={buildCheckoutUrl('tarot', 99)}>
               <div className="border border-blue-500/30 bg-blue-900/10 rounded-xl p-4 flex justify-between items-center hover:bg-blue-900/20 transition cursor-pointer">
                 <div className="flex gap-3">
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-xl">🃏</div>
@@ -366,7 +357,7 @@ export default function TeaserResult() {
                     <p className="text-[10px] text-gray-400">3-Card Spread Analysis</p>
                   </div>
                 </div>
-                <div className="text-xl font-bold">₹299</div>
+                <div className="text-xl font-bold">₹99</div>
               </div>
             </Link>
           </div>

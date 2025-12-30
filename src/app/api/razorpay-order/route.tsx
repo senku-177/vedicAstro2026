@@ -9,10 +9,10 @@ const razorpay = new Razorpay({
 });
 
 const VALID_PRICES: Record<string, number> = {
-  vedic: 499,
-  tarot: 299,
-  bundle: 699,
-  section: 50
+  vedic: 199,
+  tarot: 99,
+  bundle: 299,
+  section: 39
 };
 export async function POST(req: Request) {
   try {
